@@ -1,7 +1,6 @@
 {
 	"drop_image": "example/background.png",
 	"size": { "width":623,"height":571},
-	"noHoverZoom": true,
 	"draggables": [
 		{
 			"id":"greenup",
