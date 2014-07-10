@@ -1,0 +1,103 @@
+{
+	"drop_image": "example/background.png",
+	"size": { "width":623,"height":571},
+	"noHoverZoom": true,
+	"draggables": [
+		{
+			"id":"greenup",
+			"url":"example/greenup.png",
+			"size": { "width":65,"height":106},
+			"pos": { "x":155 , "y":330 }
+		},
+		{
+			"id":"greenupleft",
+			"url":"example/greenupleft.png",
+			"size": { "width":70,"height":70},
+			"pos": { "x":100 , "y":350 }
+		},
+		{
+			"id":"greenleft",
+			"url":"example/greenleft.png",
+			"size": { "width":106,"height":65},
+			"pos": { "x":83 , "y":405 }
+		},
+		{
+			"id":"greendownleft",
+			"url":"example/greendownleft.png",
+			"size": { "width":70,"height":70},
+			"pos": { "x":100 , "y":460 }
+		},
+		{
+			"id":"greendown",
+			"url":"example/greendown.png",
+			"size": { "width":65,"height":106},
+			"pos": { "x":155 , "y":483 }
+		},
+		{
+			"id":"greendownright",
+			"url":"example/greendownright.png",
+			"size": { "width":70,"height":70},
+			"pos": { "x":207 , "y":460 }
+		},
+		{
+			"id":"greenright",
+			"url":"example/greenright.png",
+			"size": { "width":106,"height":65},
+			"pos": { "x":225 , "y":405 }
+		},
+		{
+			"id":"greenupright",
+			"url":"example/greenupright.png",
+			"size": { "width":70,"height":70},
+			"pos": { "x":212 , "y":350 }
+		},
+		{
+			"id":"redup",
+			"url":"example/redup.png",
+			"size": { "width":65,"height":106},
+			"pos": { "x":475 , "y":330 }
+		},
+		{
+			"id":"redupleft",
+			"url":"example/redupleft.png",
+			"size": { "width":70,"height":70},
+			"pos": { "x":420 , "y":350 }
+		},
+		{
+			"id":"redleft",
+			"url":"example/redleft.png",
+			"size": { "width":106,"height":65},
+			"pos": { "x":403 , "y":405 }
+		},
+		{
+			"id":"reddownleft",
+			"url":"example/reddownleft.png",
+			"size": { "width":70,"height":70},
+			"pos": { "x":420 , "y":460 }
+		},
+		{
+			"id":"reddown",
+			"url":"example/reddown.png",
+			"size": { "width":65,"height":106},
+			"pos": { "x":475 , "y":483 }
+		},
+		{
+			"id":"reddownright",
+			"url":"example/reddownright.png",
+			"size": { "width":70,"height":70},
+			"pos": { "x":527 , "y":460 }
+		},
+		{
+			"id":"redright",
+			"url":"example/redright.png",
+			"size": { "width":106,"height":65},
+			"pos": { "x":545 , "y":405 }
+		},
+		{
+			"id":"redupright",
+			"url":"example/redupright.png",
+			"size": { "width":70,"height":70},
+			"pos": { "x":532 , "y":350 }
+		}
+	]
+}
