@@ -1,0 +1,268 @@
+<html>
+<head>
+<title>Dragcreator</title>
+	<meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+	<meta name="author" content="Lucas Morales" />
+	<script src="Dragcreator.js"></script>
+	<style>
+html { width: 100%; -webkit-font-smoothing: antialiased; cursor:default;}
+body { width: 100%; padding: 0; margin: 0;}
+p, a { font-size: 1.2em; line-height: 1.35em; color: #444; padding: 0; margin: 60px 0 40px; font-family: 'helvetica neue', helvetica, arial, sans-serif; font-weight: 200; }
+p small { font-size:.8em; line-height:1; color:#888;}
+.content { text-align: center; max-width: 480px; padding: 0 20px; display: block; margin: 0 auto 0; }
+.text {
+	font-size:1.2em;
+}
+.m {
+	background-color:#eee;
+	width:50%;
+	height:auto;
+	margin: 10% auto;
+    max-width: 630px;
+    min-width: 320px;
+	border-width:20px;
+	border-color:#eee;
+	border-radius:20px;
+    visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateX(-50%) translateY(-50%);
+	-webkit-transform: scale(0.7);
+	-moz-transform: scale(0.7);
+	-ms-transform: scale(0.7);
+	transform: scale(0.7);
+	opacity: 0;
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	transition: all 0.3s;
+}
+
+.show {
+    visibility: visible;
+}
+
+.show.m {
+	-webkit-transform: scale(.96);
+	-moz-transform: scale(.96);
+	-ms-transform: scale(.96);
+	transform: scale(.96);
+	opacity: .96;
+}
+
+.activate {
+	position:fixed;
+}
+.activate:hover {
+	cursor: pointer;
+}
+button {cursor:pointer;}
+textarea {
+	color:#444;
+	font-size:1.2em;
+	font-weight:200;
+	font-family:'helvetica neue', helvetica, arial, sans-serif;
+}
+
+#concern p {
+	color:#eee;
+}
+	</style>
+</head>
+<body>
+<div class="initialize" style="width:750;margin: 0 auto;">
+<form onsubmit="return false" name='initform' style='text-align:center;'>
+	<p style="font-size: 2em; line-height: 2em; color: black; padding: 0; margin: 60px 0 40px; font-family: 'helvetica neue', helvetica, arial, sans-serif; font-weight: 200;">Dragcreator</p>
+	<p>Choose a name for this problem:</p>
+	<input type=text name='name' size='16'/><br>
+	<p>Enter JSON of this form:<br><small>but in one line please :)</small></p>
+	<p style="background-color:#F9F9F9;line-height:1.1em;padding:1em;text-align:initial;width:730px;">
+		{<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"drop_image": url, <small>// STRING - large parent image to drop draggables</small><br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"css": [[key, value],...], <small>// NESTED ARRAYS OPTIONAL - whether to use some pretty css for draggables</small><br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"hover": [[key, value],...], <small>// NESTED ARRAYS OPTIONAL - css for hovering over draggables</small><br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"cursor": cursor_type, <small>// STRING OPTIONAL - default is "move"</small><br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"hoverZoom": bool, <small>// BOOLEAN OPTIONAL - default is false (scales draggables on hover by 1.1x)</small><br>
+			&nbsp;&nbsp;&nbsp;&nbsp;"size": {'width': _width, 'height': _height}, <small>// NUMBERS OPTIONAL (pixels) - Stretches if necessary</small><br>
+		}<br>
+		<br>
+		<small>Some properties may not be visible within this tool, but will be in the final product.</small>
+	</p>
+	<input type=text name=inp size='80' value='{"drop_image":"img.png"}'/><br>
+	<input type=submit class='submit' onclick='setup();'/>
+</form>
+</div>
+<div class='concern' style="display:none;font-color:#444;font-size:1.2em;">
+	<p style="font-size:1.5em;font-weight:500;">ALPHA VERSION<br><small>seriously</small></p>
+	<a href="documentation.html" target="_blank" class='documentationClick' style="text-decoration:underline;cursor:pointer;">Click here to see the brief documentation.</a>
+	<p>Be sure to click on the CENTER of where you want the draggables to start.</p>
+	<p>Use [SHIFT][ENTER] to view the JSON</p>
+	<p>Click outside of this message to continue</p>
+</div>
+<div class='requestInfo' style="display:none;">
+	<form onsubmit="return false" name='requestTextContent' style='text-align:center;'>
+		<p>Enter a list of this form:<br><small>but in one line please :)</small></p>
+		<p style="background-color:#eee;line-height:1.1em;padding:1em;text-align:initial;">
+			{<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;"id": css_id <small>// STRING - UNIQUE ID used for grading</small><br>
+				&nbsp;&nbsp;&nbsp;&nbsp;"file": url_1, <small>// STRING - e.g. 'img.png' (will be in edX's static folder)</small><br>
+				&nbsp;&nbsp;&nbsp;&nbsp;"size": {'width': _width, 'height': _height}, <small>// NUMBERS OPTIONAL - Stretches if necessary</small><br>
+				<!--&nbsp;&nbsp;&nbsp;&nbsp;"reusable": False, <small>// BOOLEAN OPTIONAL not yet implemented</small><br>-->
+			}<br>
+			<br>
+			<small>Some properties may not be visible in this tool, but will be in the final product.</small>
+		</p>
+		<input type=text name='inp' size='65' value='{"id":"example_draggable","url":"example.png"}'/><br>
+		<button class='submitContent'>Submit</button>&nbsp;<button class='cancelContent'>Cancel</button>
+	</form>
+</div>
+<div class='super' style='position:relative;'><div class='sample' style="position:relative;border:2px solid #777;"></div></div>
+<div class='stagetwo'></div>
+<div style="position:relative;width:60%;left:20%;text-align:center;">
+<div class='pos' style="display:none;color:#777;">X: <span class='x' style="color:black;"></span>&nbsp;&nbsp;&nbsp;&nbsp;Y: <span class='y' style="color:black;"></span><br><form name='directAnswer' onsubmit="return false"><i style="color:orange">problem_answer</i>=<input name="directAnswerContent" style="color:red" type=text onblur="xml(this.value);" value='{"draggableID":[240,120]}' size="30"/></form><br>Remember, use [SHIFT][ENTER] to view the JSON.</div>
+<div class='stagetwotargets' style="display:none;cursor:pointer;color:#777;">Click here to save your targets</div>
+<div class='stagetwostart' style="display:none;cursor:pointer;color:#777;">Alternatively, you can click here to graphically create the answer.</div>
+</div>
+<div class='xml' contenteditable=true spellcheck=false style="display:none;position:relative;background-color:#fff;border:2px solid #444;text-align:initial;color:black;height:30%;width:60%;left:20%;overflow-y:scroll;"></div><div class='bspace' style="display:none;"><br><br><br></div>
+<script>
+$('.documentationClick').click(function(){$(".documentation").css("display","none");});
+function htmlEncode( input ) {
+    return String(input)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+function xml(val){
+	val = typeof val !== 'undefined' ? val : '<i><span style="color:orange;">problem_answer</span></i>';
+	$('.xml').html('<span style="color:green;">&lt;problem&gt;<br>&lt;script</span> <span style="color:blue;">type</span>=<span style="color:red;">"loncapa/python"</span><span style="color:green;">&gt;</span><br>import json<br><br>def isNear(state,solution,init,draggableNum,id):<br>&nbsp;&nbsp;&nbsp;&nbsp;return abs(state[id][0]-solution[id][0])&amp;lt;init["draggables"][draggableNum[id]]["size"]["width"]/2 and abs(state[id][1]-solution[id][1])&amp;lt;init["draggables"][draggableNum[id]]["size"]["height"]/2<br><br>def check(expect, ans):<br>&nbsp;&nbsp;&nbsp;&nbsp;solution = eval(expect)<br>&nbsp;&nbsp;&nbsp;&nbsp;par = json.loads(ans)<br>&nbsp;&nbsp;&nbsp;&nbsp;init = json.loads(par["answer"])<br>&nbsp;&nbsp;&nbsp;&nbsp;state = json.loads(par["state"])<br>&nbsp;&nbsp;&nbsp;&nbsp;draggableNum = {init["draggables"][i]["id"]: i for i in xrange(len(init["draggables"]))}<br>&nbsp;&nbsp;&nbsp;&nbsp;for draggable in init["draggables"]:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if draggable["id"] not in solution:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;solution[draggable["id"]]=[draggable["pos"]["x"],draggable["pos"]["y"]]<br>&nbsp;&nbsp;&nbsp;&nbsp;return {"ok":all([ isNear(state,solution,init,draggableNum,id) for id in state])}<br><span style="color:green;">&lt;/script&gt;<br>&lt;customresponse</span> <span style="color:blue;">cfn</span>=<span style="color:red;">"check"</span> <span style="color:blue;">expect</span>=<span style="color:red;">&#39;'+val+'&#39;</span><span style="color:green;">&gt;<br>&nbsp;&nbsp;&lt;jsinput </span><span style="color:blue;">gradefn</span>=<span style="color:red;">"JSInput.getGrade"</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">get_statefn</span>=<span style="color:red;">"JSInput.getState"</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">set_statefn</span>=<span style="color:red;">"JSInput.setState"</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">width</span>=<span style="color:red;">"'+String(inp.size.width+10)+'"</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">height</span>=<span style="color:red;">"'+String(inp.size.height+60)+'"</span><br>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">html_file</span>=<span style="color:red;">"/static/dragv2.html?js='+jsonname+'"</span><span style="color:green;">/&gt;<br>&lt;/customresponse&gt;<br>&lt;/problem&gt;</span>');
+}
+function dedupe() {
+	var arr = {};
+	for ( var i=0; i < inp.draggables.length; i++ )
+	    arr[inp.draggables[i]['id']] = inp.draggables[i];
+	inp.draggables = new Array();
+	for ( var key in arr )
+	    inp.draggables.push(arr[key]);
+}
+function updatejson(){
+	for (var i=0;i<inp.draggables.length;i++){
+		inp.draggables[i].pos = {x:$('#'+inp.draggables[i].id).position().left-$('.sample').position().left+inp.draggables[i].size.width/2,y:$('#'+inp.draggables[i].id).position().top-$('.sample').position().top+inp.draggables[i].size.height/2};
+	}
+	dedupe();
+}
+function revert() {
+	updatejson();
+	$('.sample').html('');
+	for (var i=0;i<inp.draggables.length;i++){
+		$('.sample').html($('.sample').html() + '<div id='+inp.draggables[i].id+' style="position:absolute;background-image:url('+inp.draggables[i].url+');background-size:'+String(inp.draggables[i].size.width)+'px '+String(inp.draggables[i].size.height)+'px;width:'+String(inp.draggables[i].size.width)+'px;height:'+String(inp.draggables[i].size.height)+'px;left:'+String(inp.draggables[i].pos.x-inp.draggables[i].size.width/2)+'px;top:'+String(inp.draggables[i].pos.y-inp.draggables[i].size.height/2)+'px;"/>');
+		$('#'+inp.draggables[i].id).draggable({containment:'parent'});
+	}
+}
+function setup () {
+	$('.bspace').css('display','block');
+	$('.stagetwostart').css('display','block');
+	$('.xml').css('display','block');
+	bool=false;
+	stagetwo=false;
+	jsonname = document.initform.name.value;
+	inp = JSON.parse(document.initform.inp.value);
+	prevDrag='{"id":"example_draggable","url":"example.png"}';
+	window.addEventListener("keydown", function(event) {
+		if (event.shiftKey && event.keyCode == 13) {
+			if (bool){$.unblockUI();bool=false;return null;}
+			if (!stagetwo){revert();}
+			bool=true;
+	    	$.blockUI({ message:'<p style="font-size:1.5em;">JSON:<br><small>save as <i>'+jsonname+'.json</i></small></p><textarea style="font-size:.8em;" cols="80" rows="5">'+JSON.stringify(inp)+'</textarea><br><br><button class="jsonbutton">Download '+jsonname+'.json</button><br><br><p style="font-size:1.5em">XML:<br><small>(located below the drop image)<br>remember to change <i>problemName</i> and <i>problem_answer</i>.</small></p>', css: {width:'50%', left:'25%', top:'10%', border: 'none',padding: '15px',backgroundColor: 'white','-webkit-border-radius': '10px','-moz-border-radius':'10px',opacity:.8,color:'#444'}, focusInput:false, onOverlayClick: function(){bool=false;$.unblockUI();} });
+			$('.jsonbutton').click(function(){
+				saveAs(new Blob([JSON.stringify(inp)],{type: "text/plain"}), jsonname+".json");
+			});
+		}
+	});
+	inp.draggables = [];
+	$.blockUI({message:$('.concern'), css: {width:'40%', left:'30%', top:'5%', border: 'none',padding: '15px',backgroundColor: 'white','-webkit-border-radius': '10px','-moz-border-radius':'10px',opacity:.8,color:'#444'}, onOverlayClick: $.unblockUI});
+	$('.initialize').css('display','none');
+	function setSampleBg(){
+		$('.sample').css('background-image','url('+inp.drop_image+')');
+		$('.sample').css('background-size',inp.size.width+'px '+inp.size.height+'px');
+		$('.sample').css('width',String(inp.size.width));
+		$('.sample').css('height',String(inp.size.height));
+		$('.sample').css('top','0');
+		$('.sample').css('left','0');
+		$('.super').css('width',String(inp.size.width));
+		$('.super').css('left',String((window.innerWidth-inp.size.width)/2)+'px');
+		xml();
+	}
+	if (typeof inp.size === 'undefined') {
+		var img = new Image();
+		img.onload = function() {
+			inp.size = {width:Number(this.width),height:Number(this.height)};
+			setSampleBg();
+		}
+		img.src = inp.drop_image;
+	} else {
+		setSampleBg();
+	}
+	$('.pos').css('display','inline-block');
+	$('.sample').mousemove(function (e) {
+		$('.x').html(e.pageX-$('.super').position().left);
+		$('.y').html(e.pageY-$('.super').position().top);
+	});
+	$('.sample').click(function (e) {
+		var posX = $(this).position().left-$('.sample').position().left, posY = $(this).position().top-$('.sample').position().top;
+		$.blockUI({ message: $('.requestInfo'), css: {width:'40%', left:'30%', top:'10%', border: 'none',padding: '15px',backgroundColor: 'white','-webkit-border-radius': '10px','-moz-border-radius':'10px',opacity:.8,color:'black'}, onOverlayClick: function(){bool=false;$.unblockUI();} });
+		$('.cancelContent').click(function () {
+			document.requestTextContent.inp.value=prevDrag;
+			$.unblockUI();
+		});
+		$('.submitContent').click(function () {
+			$.unblockUI();
+			prevDrag=document.requestTextContent.inp.value;
+			var draggable_j = JSON.parse(document.requestTextContent.inp.value);
+			if (typeof draggable_j.size === 'undefined') {
+				var img = new Image();
+				img.onload = function() {
+					draggable_j.size = {width:Number(this.width),height:Number(this.height)};
+					inp.draggables.push(draggable_j);
+					var newHTML = '<div id='+draggable_j.id+' style="position:absolute;background-image:url('+draggable_j.url+');background-size:'+String(draggable_j.size.width)+'px '+String(draggable_j.size.height)+'px;width:'+String(draggable_j.size.width)+'px;height:'+String(draggable_j.size.height)+'px;"/>';
+					$('.sample').html($('.sample').html()+newHTML);
+					$('#'+draggable_j.id).position({of:e});
+					revert();
+				}
+				img.src = draggable_j.url;
+			} else {
+				inp.draggables.push(draggable_j);
+				var newHTML = '<div id='+draggable_j.id+' style="position:absolute;background-image:url('+draggable_j.url+');background-size:'+String(draggable_j.size.width)+'px '+String(draggable_j.size.height)+'px;width:'+String(draggable_j.size.width)+'px;height:'+String(draggable_j.size.height)+'px;top:'+String(draggable_j.pos.y)+'px;left:'+String(draggable_j.pos.x)+'px;" />';
+				$('.sample').html($('.sample').html()+newHTML);
+				$('#'+draggable_j.id).position({of:e});
+				revert();
+			}
+		});
+		console.log(inp)
+	});
+	$('.sample').mousemove(function(){
+		for (var i=0;i<inp.draggables.length;i++){
+			$('#'+inp.draggables[i].id).draggable({containment:'parent'});
+		}
+	});
+	$('.stagetwostart').click(function () {
+		updatejson();
+		stagetwo=true;
+		$('.sample').click(function(){});
+		$('.stagetwostart').css('display','none');
+		$('.stagetwotargets').css('display','block');
+		$('.stagetwotargets').click(function(){
+			var o = {};
+			for (var i=0;i<inp.draggables.length;i++){
+				if ([$('#'+inp.draggables[i].id).position().left,$('#'+inp.draggables[i].id).position().top] == inp.draggables[i].pos){} else {
+					o[inp.draggables[i].id]=[$('#'+inp.draggables[i].id).position().left+inp.draggables[i].size.width/2,$('#'+inp.draggables[i].id).position().top+inp.draggables[i].size.height/2]
+				}
+			}
+			document.directAnswer.directAnswerContent.value = JSON.stringify(o);
+			xml(JSON.stringify(o));
+		});
+	});
+}
+</script>
+</body>
+</html>
