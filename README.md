@@ -7,6 +7,7 @@ Features of dragv2 include:
 * specify custom sizes for your images when creating the problem
 * extremely simple and readable XML with JSInput
 * draggables start at a custom location on the drop image
+* draggables snap to their initial location
 * no size limitations
 * built-in capability for custom CSS formatting of draggables: default and hover
 * optional draggable expansion on hover (pre-written CSS)
