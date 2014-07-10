@@ -39,7 +39,7 @@ def check(expect, ans):
             solution[draggable["id"]]=[draggable["pos"]["x"],draggable["pos"]["y"]]
     return {"ok":all([ isNear(state,solution,init,draggableNum,id) for id in state])}
 </script>
-<customresponse cfn="check" expect='{'greenupleft': [262,100], 'reddown': [315,225]}'>
+<customresponse cfn="check" expect="{'greenupleft': [262,100], 'reddown': [315,225]}">
   <jsinput gradefn="JSInput.getGrade"
     get_statefn="JSInput.getState"
     set_statefn="JSInput.setState"
