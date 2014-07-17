@@ -3,6 +3,8 @@ dragv2
 
 Designed with problem creators in mind, dragv2 problems can be made _without writing any code_.
 Features of dragv2 include:
+* __NEW__ multi-touch/mobile support
+* __NEW__ blazing response (thanks to clever coding and no dependancy on jQuery, jQuery UI, or other large libraries)
 * draggables can be .svg files, among several other file types (.png, .jpg, ...)
 * draggables start at a custom location on the drop image (no inconvenient edX lists)
 * draggables snap to their initial location
