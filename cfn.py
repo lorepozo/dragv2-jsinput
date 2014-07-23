@@ -23,9 +23,9 @@ def rcheck(states,targets,d):
         if rcheck(newStates,targets[1:],d): return True
     return False
 
-# You probably shouldn't be messing with this
+# You probably shouldn't be messing with this (except for the first line)
 def check(expect, ans):
-    solution = {"greenupleft": [[262,100]], "reddown": [[315,225]]}
+    solution = #### your solution dictionary here
     par = json.loads(ans)
     init = json.loads(par["answer"])
     state = json.loads(par["state"])
