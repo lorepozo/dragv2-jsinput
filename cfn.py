@@ -9,41 +9,33 @@
 import json
 
 # You can mess with this lots
-def isNear(pos,target,d):
+def isNear(pos, target, d):
     return abs(pos[0]-target[0])&lt;d["size"]["width"]/2 and abs(pos[1]-target[1])&lt;d["size"]["height"]/2
 
 # Definitely don't mess with this
-def rcheck(states,targets,d):
+def rcheck(states, targets, d):
     if len(states) != len(targets): return False
     if len(states) == 0: return True
-    suitables = [state for state in states if isNear(state,targets[0],d)]
+    suitables = [state for state in states if isNear(state, targets[0], d)]
     for suitable in suitables:
         newStates=states
         newStates.remove(suitable)
-        if rcheck(newStates,targets[1:],d): return True
+        if rcheck(newStates, targets[1:], d): return True
     return False
 
 # You probably shouldn't be messing with this (except for the first line)
 def check(expect, ans):
-    solution = #### your solution dictionary here
+    solution = SOLUTION
     par = json.loads(ans)
     init = json.loads(par["answer"])
     state = json.loads(par["state"])
     dN = {init["draggables"][i]["id"]: i for i in xrange(len(init["draggables"]))}
+    if len(state)!=len(solution): return False
     for id in state:
-        # If statement for draggables not defined in solution
         d=init["draggables"][dN[id]]
-        pos = [d["pos"]["x"],d["pos"]["y"]]
-        if solution.get(id)==None:
-            if d.get("reusable"):
-                if state[id][0]!=pos: return False
-            else:
-                if state[id]!=pos: return False
-        # For reusable draggables defined in solution
+        if id not in solution: return False
         elif d.get("reusable"):
-            if pos not in solution[id]: solution[id].append(pos)
-            if not rcheck(state[id],solution[id],d): return False
-        # For non-reusable draggables defined in solution
+            if not rcheck(state[id], solution[id], d): return False
         else:
-            if not isNear(state[id],solution[id],d): return False
+            if not isNear(state[id], solution[id], d): return False
     return True
