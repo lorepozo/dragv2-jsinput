@@ -162,7 +162,8 @@ var JSInput = (function () {
 	// Updates a draggable
     function drag_update(e) {
         var d=JSON.parse(e.getAttribute('d')),
-			b=e.inParent();
+			b=e.inParent(),
+			t=isNearTarget(e);
 		
 		// Reset draggable to start location and remove if reusable
         if(isNearStart(e)){
@@ -171,7 +172,16 @@ var JSInput = (function () {
 				'top':d.pos.y-d.size.height/2+'px'
        		});
 			d.reusable&&e.parentElement.removeChild(e);
+		} else
+		
+		// Snap to nearby snappable target, if applicable
+		if (t){
+			e.css({
+				'left':t[0]+'px',
+				'top':t[1]+'px'
+			});
 		}
+		
     }
 
 	// Resets all contents
@@ -304,10 +314,34 @@ var JSInput = (function () {
         reset();
     }
 	
+	// Return target array [x,y] if element near a target
+	function isNearTarget(e) {
+        var b=e.inParent(),t,i,s=[];
+		
+		if (!c.inp.targets||c.inp.targets.length==0)return!1;
+		
+		for (i=0;i<c.inp.targets.length;i++) {
+        	t=c.inp.targets[i];
+			if (Math.abs(b.left + b.width / 2 - t[0]) < b.width && Math.abs(b.top + b.height / 2 - t[1]) < b.height) {
+				s[s.length]=t;
+			}
+		}
+		
+		if(s.length==0)return!1;
+		if(s.length==1)return s[0];
+		
+		var o={};
+		for (i=0;i<s.length;i++) {
+			t=s[i];
+			o[(b.left + b.width / 2 - t[0])*(b.left + b.width / 2 - t[0])+(b.top + b.height / 2 - t[1])*(b.top + b.height / 2 - t[1])]=t
+		}
+		return o[Math.min.apply(null,Object.keys(o))];
+	}
+	
 	// Return boolean if element near its start
     function isNearStart(e) {
         var b=e.inParent(),d=JSON.parse(e.getAttribute('d'));
-        return (Math.abs(b.left + d.size.width / 2 - d.pos.x) < d.size.width && Math.abs(b.top + d.size.height / 2 - d.pos.y) < d.size.height);
+        return (Math.abs(b.left + b.width / 2 - d.pos.x) < b.width && Math.abs(b.top + b.height / 2 - d.pos.y) < b.height);
     }
 	
 	// Get JSON, initialize everything
@@ -360,6 +394,7 @@ var JSInput = (function () {
         s = JSON.parse(arguments.length === 1 ? arguments[0] : arguments[1]);
 		reset(s)
     }
+	
     return {
         getState: getState,
         setState: setState,
