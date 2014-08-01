@@ -55,3 +55,10 @@ def check(expect, ans):
         # For debugging of a single common mistake, use: return {'ok':False,'msg':g[1]}
         if grade(mistake[0]): return {'ok':False,'msg':mistake[1]}
     return False;
+    
+################# For using draganddrop.grade(legacy_state, correct_answer) – edX's grading method:    
+legacy_state = []
+for id in state:
+    if init["draggables"][dN[id]]["reusable"]: [legacy_state.append({id:coordinate}) for coordinate in state[id]]
+    else: legacy_state.append({id:state[id]})
+legacy_state=json.dumps(legacy_state)
