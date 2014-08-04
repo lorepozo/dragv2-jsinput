@@ -35,8 +35,6 @@
 			box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2);
 			height: auto;
 			padding: 10px;
-			font-family: arial,sans-serif;
-			font-size: 14px;
 			position: absolute;
 			z-index: 998;
 		}
@@ -315,25 +313,17 @@ var JSInput = (function () {
 	
 	// Return target array [x,y] if element near a target
 	function isNearTarget(e) {
-        var b=e.inParent(),t,i,s=[];
+        var b=e.inParent(),t,i,o={},q=document.getElementsByClassName('draggable');
 		
 		if (!c.inp.targets||c.inp.targets.length==0)return!1;
 		
 		for (i=0;i<c.inp.targets.length;i++) {
         	t=c.inp.targets[i];
 			if (Math.abs(b.left + b.width / 2 - t[0]) < b.width && Math.abs(b.top + b.height / 2 - t[1]) < b.height) {
-				s[s.length]=t;
+				o[(b.left + b.width / 2 - t[0])*(b.left + b.width / 2 - t[0])+(b.top + b.height / 2 - t[1])*(b.top + b.height / 2 - t[1])]=t
 			}
 		}
-		
-		if(s.length==0)return!1;
-		if(s.length==1)return s[0];
-		
-		var o={};
-		for (i=0;i<s.length;i++) {
-			t=s[i];
-			o[(b.left + b.width / 2 - t[0])*(b.left + b.width / 2 - t[0])+(b.top + b.height / 2 - t[1])*(b.top + b.height / 2 - t[1])]=t
-		}
+		if(o=={})return!1;
 		return o[Math.min.apply(null,Object.keys(o))];
 	}
 	
