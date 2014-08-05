@@ -46,14 +46,15 @@ def check(expect, ans):
                 if not rcheck(state[id], solution[id], d): return [False,id+" in wrong place"]
             else:
                 if not isNear(state[id], solution[id], d): return [False,id+" in wrong place"]
-        return True
+        return [True,""]
     for solution in solutions:
         g = grade(solution)
         # For debugging of a single solution, use: return {'ok':False,'msg':g[1]}
-        if grade(solution): return True
+        if g[0]: return True
     for mistake in common_mistakes:
+        g = grade(mistake[0])
         # For debugging of a single common mistake, use: return {'ok':False,'msg':g[1]}
-        if grade(mistake[0]): return {'ok':False,'msg':mistake[1]}
+        if g[0]: return {'ok':False,'msg':mistake[1]}
     return False;
     
 ################# For using draganddrop.grade(legacy_state, correct_answer) – edX's grading method:    
