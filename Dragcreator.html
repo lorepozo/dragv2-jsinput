@@ -1632,6 +1632,12 @@ function setup(){
 		var mathjax=document.createElement('script');
 		mathjax.src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
 		document.getElementsByTagName('head')[0].appendChild(mathjax);
+		setTimeout(function(){
+			MathJax.Hub.Config({
+				showMathMenu: false,
+				showMathMenuMSIE: false
+			});
+		},1600)
 	}
 	
 	var static_style = 'cursor:'+(inp.cursor||'move')+';',
@@ -1654,13 +1660,16 @@ function setup(){
 	document.querySelector('.pos').style.display='block';
 	document.querySelector('.xml').style.display='block';
 	document.querySelector('.xmldesc').style.display='block';
-	document.querySelector('.downloadjson').setAttribute('href','data:application/json;charset=utf-8,'+encodeURIComponent(df.getInit()));
 	document.querySelector('.downloadjson').setAttribute('download',initform.name.value+'.json');
 	document.querySelector('.downloadjson').onclick = function(e){
 		if((/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) || /\.NET/.test(navigator.userAgent)) {
 			e.preventDefault();
 			alert("On your browser (Safari or IE), you can't just click on this button and download the json file. Please see the help information.")
 		}
+		this.setAttribute('href','data:application/json;charset=utf-8,'+encodeURIComponent(df.getInit()));
+	};
+	document.querySelector('.downloadjson').oncontextmenu = function(){
+		this.setAttribute('href','data:application/json;charset=utf-8,'+encodeURIComponent(df.getInit()));
 	};
 	document.getElementById('problem_name').innerHTML = initform.name.value;
 	xml(inp);
@@ -1695,7 +1704,7 @@ function setup(){
 	},false);
 	window.addEventListener("keydown", function(event) {
 		if (event.shiftKey && event.keyCode == 13) {
-			var str,j=df.getInit();
+			var j=df.getInit();
 			Modal.open({content:'<textarea id="json" style="font-size:.8em;" cols="80" rows="5">'+j+'</textarea>'});
 		}
 	});
