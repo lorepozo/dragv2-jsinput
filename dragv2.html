@@ -70,43 +70,32 @@
 			z-index: 999;
 		}
         button {
-            -webkit-background-clip: padding-box;
-            -webkit-box-shadow: rgb(255, 255, 255) 0px 1px 0px 0px inset;
-            -webkit-font-smoothing: antialiased;
-            background-clip: padding-box;
-            background-color: rgb(238, 238, 238);
-            background-image: linear-gradient(rgb(238, 238, 238), rgb(210, 210, 210));
-			border: 1px solid rgb(202,202,202);
-            border-bottom-left-radius: 3px;
-            border-bottom-right-radius: 3px;
-            border-top-left-radius: 3px;
-            border-top-right-radius: 3px;
-            box-shadow: inset 0 0 1px rgb(255, 255, 255);
-            color: rgb(51, 51, 51);
-            cursor: pointer;
-            display: inline-block;
-            font-family: 'Open Sans', Verdana, Geneva, sans-serif, sans-serif;
-            font-size: 13px;
-            font-weight: 400;
-            height: 40px;
-            letter-spacing: normal;
-            line-height: normal;
-            margin: 0 0 0 0;
-            padding: 7px 18px;
-            text-align: center;
-            text-shadow: rgb(248, 248, 248) 0px 1px 0px;
-            vertical-align: middle;
+			border: 1px solid rgb(53, 126, 189);
+			background-color: rgb(66, 139, 202);
+			border-bottom-left-radius: 4px;
+			border-bottom-right-radius: 4px;
+			border-top-left-radius: 4px;
+			border-top-right-radius: 4px;
+			box-sizing: border-box;
+			color: white;
+			cursor: pointer;
+			display: inline-block;
+			font-size: 18px;
+			line-height: 20px;
+			margin:5px 0;
+			overflow: visible;
+			padding:10px 16px;
+			white-space: nowrap;
+			text-decoration:none;
         }
         button:hover {
-            -webkit-box-shadow: rgb(251, 251, 251) 0px 1px 0px 0px inset;
-            background-color: rgb(225, 225, 225);
-            background-image: linear-gradient(rgb(225, 225, 225), rgb(202, 202, 202));
-            box-shadow: rgb(251, 251, 251) 0px 1px 0px 0px inset;
-            color: rgb(51, 51, 51);
+			border: 1px solid rgb(40, 94, 142);
+			background-color: rgb(48, 113, 169);
         }
         button:active {
-            -webkit-box-shadow: rgb(195, 195, 195) 0px 0px 8px 4px inset, rgb(195, 195, 195) 0px 0px 8px 4px inset, rgb(238, 238, 238) 0px 1px 1px 0px;
-            box-shadow: rgb(195, 195, 195) 0px 0px 8px 4px inset, rgb(195, 195, 195) 0px 0px 8px 4px inset, rgb(238, 238, 238) 0px 0px 1px 0px;
+			-webkit-box-shadow: rgba(0, 0, 0, 0.121569) 0px 3px 5px 0px inset;
+			border: 1px solid rgb(40, 94, 142);
+			background-color: rgb(48, 113, 169);
         }
         .text_box {
             overflow: auto;
@@ -123,6 +112,10 @@
             padding-top: 5px;
             padding-bottom: 5px;
         }
+		#helpButton, #resetButton {
+			margin:10px 10px 0 0;
+			cursor:pointer;
+		}
     </style>
 </head>
 <body>
@@ -281,9 +274,9 @@ var JSInput = (function () {
 		frag.appendChild(dropE);
 		
 		// Add help and reset buttons
-		resetE.className="resetButton",
+		resetE.id="resetButton",
 		resetE.innerHTML="Reset",
-		helpE.className="helpButton",
+		helpE.id="helpButton",
 		helpE.innerHTML="Help";
 		frag.appendChild(resetE);
 		frag.appendChild(helpE);
@@ -360,8 +353,8 @@ var JSInput = (function () {
 			document.getElementsByTagName('head')[0].appendChild(mathjax);
 		}
 		init(q);
-   		document.querySelector('.resetButton').onclick=reset;
-   		document.querySelector('.helpButton').onclick=function () {
+   		document.getElementById('resetButton').onclick=reset;
+   		document.getElementById('helpButton').onclick=function () {
             Modal.open({content: '<p>'+(c.inp.help||c.help)+'</p>'});
    		};
 	};

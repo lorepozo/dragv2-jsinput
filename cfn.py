@@ -38,7 +38,7 @@ def check(expect, ans):
     state = json.loads(par["state"])
     dN = {init["draggables"][i]["id"]: i for i in xrange(len(init["draggables"]))}
     def grade(solution):
-        if len(state)!=len(solution): return False
+        if len(state)!=len(solution): return [False,'Too many/too few']
         for id in state:
             d=init["draggables"][dN[id]]
             if id not in solution: return [False,id+' used, not in solution']
