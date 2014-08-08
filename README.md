@@ -4,7 +4,10 @@ dragv2
 Designed with problem creators in mind, dragv2 problems can be made _without writing any code_.
 Features of dragv2 include:
 * multi-touch/mobile support
+* Text/Mathjax/HTML draggables
+* compatible with edX's draganddrop.grade function (see cfn.py)
 * _very_ responsive
+* create a custom help message for the problem
 * draggables can be .svg files, among several other file types (.png, .jpg, ...)
 * draggables start at a custom location on the drop image
 * draggables snap to their initial location (reusable draggables delete when this happens)

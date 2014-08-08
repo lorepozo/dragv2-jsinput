@@ -15,6 +15,9 @@
 			font-family: 'helvetica neue', helvetica, arial, sans-serif; 
 			font-weight: 300; 
 		}
+		.draggable p {
+			margin:0;
+		}
 		#modal-overlay {
 			background: #fff;
 			filter: alpha(opacity=60);
@@ -97,21 +100,6 @@
 			border: 1px solid rgb(40, 94, 142);
 			background-color: rgb(48, 113, 169);
         }
-        .text_box {
-            overflow: auto;
-            display: none;
-            background-color: rgb(250, 248, 239);
-            margin-bottom: -16px;
-            font-size: .5em;
-            color: rgb(100, 100, 100);
-            font-family: 'Open Sans', Verdana, Geneva, sans-serif, sans-serif;
-        }
-        .text_box_contents {
-            margin-left: 20px;
-            margin-right: 20px;
-            padding-top: 5px;
-            padding-bottom: 5px;
-        }
 		#helpButton, #resetButton {
 			margin:10px 10px 0 0;
 			cursor:pointer;
@@ -143,7 +131,7 @@ var JSInput = (function () {
             	'left':d.pos.x-d.size.width/2+'px',
 				'top':d.pos.y-d.size.height/2+'px'
 			});
-			q.appendChild(n);
+			q.insertBefore(n,e);
 			r=new Draggable(n,{containment:'.drop'});
 			r.on('dragStart',function(){drag_start(this.handles[0])});
 			r.on('dragEnd',function(){drag_update(this.handles[0])});
@@ -353,9 +341,15 @@ var JSInput = (function () {
 			document.getElementsByTagName('head')[0].appendChild(mathjax);
 		}
 		init(q);
-   		document.getElementById('resetButton').onclick=reset;
+   		document.getElementById('resetButton').onclick=function() {
+			reset();
+			window.MathJax&&MathJax.Hub.Queue(["Typeset",MathJax.Hub,document.body]);			
+		};
    		document.getElementById('helpButton').onclick=function () {
-            Modal.open({content: '<p>'+(c.inp.help||c.help)+'</p>'});
+			var h=document.createElement('div');
+			h.innerHTML='<p>'+(c.inp.help||c.help)+'</p>';
+			window.MathJax&&MathJax.Hub.Queue(["Typeset",MathJax.Hub,h]);
+            Modal.open({content: h.innerHTML});
    		};
 	};
 	x.open("get", $_GET('js')+".json", false);
