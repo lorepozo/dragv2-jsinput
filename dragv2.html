@@ -336,8 +336,17 @@ var JSInput = (function () {
 	x.onload = function(){
 		var q=JSON.parse(this.responseText);
 		if(q.mathjax){
-			var mathjax=document.createElement('script');
+			var mathjax=document.createElement('script'),update;
 			mathjax.src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+			update = setInterval(function(){
+				if(window.MathJax){
+					MathJax.Hub.Config({
+						showProcessingMessages: false,
+						messageStyle: "none"
+					});
+					clearInterval(update);
+				 }
+			}, 1);
 			document.getElementsByTagName('head')[0].appendChild(mathjax);
 		}
 		init(q);
