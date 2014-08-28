@@ -22,6 +22,10 @@ Quick Taste
 -----------
 [See examples here](http://www.lucasmorales.co/resources/relate/dragv2_examples.html "Made with Dragcreator!")
 
+Getting Started
+---------------
+Open Dragcreator.html, and click on help to see what files you need. Then use Dragcreator to create your problem.
+
 Dragcreator
 ===========
 
