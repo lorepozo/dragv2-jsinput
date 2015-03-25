@@ -20,7 +20,7 @@ Features of dragv2 include:
 
 Quick Taste
 -----------
-[See examples here](http://www.lucasmorales.co/resources/relate/dragv2_examples.html "Made with Dragcreator!")
+[See examples here](http://lucasem.com/resources/relate/dragv2_examples.html "Made with Dragcreator!")
 
 Getting Started
 ---------------
